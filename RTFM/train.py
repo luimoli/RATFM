@@ -29,7 +29,7 @@ from tqdm import tqdm
 parser = argparse.ArgumentParser()
 parser.add_argument('--n_epochs', type=int, default=60,
                     help='number of epochs of training')
-parser.add_argument('--batch_size', type=int, default=16,
+parser.add_argument('--batch_size', type=int, default=4,
                     help='training batch size')
 parser.add_argument('--lr', type=float, default=2e-4,
                     help='adam: learning rate')
@@ -54,7 +54,7 @@ parser.add_argument('--channels', type=int, default=2,   # (inflow + outflow) | 
                     help='number of flow image channels')
 parser.add_argument('--folder_name', type=str, default='xian',
                     help='folder_name to save models ')                   
-parser.add_argument('--dataset_name', type=str, default='xian',  # xian | cdu | P1
+parser.add_argument('--dataset_name', type=str, default='xian',  #  XiAn | ChengDu | TaxiBJ-P1 
                     help='which dataset to use')
 parser.add_argument('--city', type=str, default='xian', # cdu | xian | P1 | no  
                     help='which city_road_map to use')
@@ -84,12 +84,12 @@ print(opt)
 torch.manual_seed(opt.seed)
 warnings.filterwarnings('ignore')
 # path for saving model---------------------------------------------
-while os.path.exists('saved_model/{}/{}-{}-{}-{}'.format(opt.folder_name,
+while os.path.exists('model/{}/{}-{}-{}-{}'.format(opt.folder_name,
                                              opt.n_residuals,
                                              opt.base_channels,
                                              opt.ext_flag,
                                              opt.run_num)): opt.run_num+=1
-save_path = 'saved_model/{}/{}-{}-{}-{}'.format(opt.folder_name,
+save_path = 'model/{}/{}-{}-{}-{}'.format(opt.folder_name,
                                              opt.n_residuals,
                                              opt.base_channels,
                                              opt.ext_flag,
@@ -122,6 +122,7 @@ model = Mixmap(position_embedding, transformer,
                 road_channels=opt.road_channels,
                 img_width=opt.img_width,
                 img_height=opt.img_height,
+                n_residuals=opt.n_residuals,
                 ext_flag=opt.ext_flag)
 
 model.apply(weights_init_normal)
@@ -141,7 +142,6 @@ valid_dataloader = get_dataloader_sr(
     source_datapath, opt.batch_size, 'valid', opt.city, opt.channels)
 
 # Optimizers----------------------------------------------
-# lr = opt.lr
 optimizer = torch.optim.Adam(model.parameters(), lr=opt.lr, betas=(opt.b1, opt.b2))
 
 

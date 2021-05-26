@@ -43,7 +43,8 @@ class Residual_OneD_Block(nn.Module):
 
 
 class Mixmap(nn.Module):
-    def __init__(self, position_embedding, transformer, in_channels=2, out_channels=2, n_residual_blocks=5,n_residual_blocks_post=11,
+    def __init__(self, position_embedding, transformer, in_channels=2, out_channels=2, 
+                n_residual_blocks_prefix=5,n_residuals=16,
                  base_channels=64, road_channels=1,ext_dim=7, img_width=64, img_height=64, ext_flag=False, hidden_dim=128):
         super(Mixmap, self).__init__()
         self.ext_flag = ext_flag
@@ -90,13 +91,13 @@ class Mixmap(nn.Module):
 
         # Residual blocks
         res_blocks = []
-        for _ in range(n_residual_blocks):
+        for _ in range(n_residual_blocks_prefix):
             res_blocks.append(ResidualBlock(base_channels))
         self.res_blocks = nn.Sequential(*res_blocks)
 
-        # Residual blocks
+        # Residual blocks after introducing road network map
         res_blocks_post = []
-        for _ in range(n_residual_blocks_post):
+        for _ in range(n_residuals - n_residual_blocks_prefix):
             res_blocks_post.append(ResidualBlock(base_channels))
         self.res_blocks_post = nn.Sequential(*res_blocks_post)
 
@@ -159,11 +160,11 @@ class Mixmap(nn.Module):
         inp = cmap
         # external factor modeling 
         if self.ext_flag and self.in_channels==2: # XiAn and ChengDu
-            ext_out1 = self.embed_day(ext[:, 0].long().view(-1, 1)).view(-1, 2)  #[B,2]
-            ext_out2 = self.embed_hour(ext[:, 1].long().view(-1, 1)).view(-1, 3) #[B,3]
-            ext_out3 = self.embed_weather(ext[:, 4].long().view(-1, 1)).view(-1, 3) #[B,3]
-            ext_out4 = ext[:, 2:4] #[B,2]
-            ext_out = self.ext2lr(torch.cat([ext_out1, ext_out2, ext_out3, ext_out4], dim=1)).view(-1, 1, self.img_width, self.img_height)  #[B,10] [B,64*64] [B,1,64,64]
+            ext_out1 = self.embed_day(ext[:, 0].long().view(-1, 1)).view(-1, 2) 
+            ext_out2 = self.embed_hour(ext[:, 1].long().view(-1, 1)).view(-1, 3) 
+            ext_out3 = self.embed_weather(ext[:, 4].long().view(-1, 1)).view(-1, 3) 
+            ext_out4 = ext[:, 2:4] 
+            ext_out = self.ext2lr(torch.cat([ext_out1, ext_out2, ext_out3, ext_out4], dim=1)).view(-1, 1, self.img_width, self.img_height) 
             inp = torch.cat([cmap, ext_out], dim=1)
         if self.ext_flag and self.in_channels==1: # TaxiBJ-P1
             ext_out1 = self.embed_day(ext[:, 4].long().view(-1, 1)).view(-1, 2)
@@ -199,8 +200,6 @@ class Mixmap(nn.Module):
         pos = self.position_embedding(out_nested).to(out_nested.tensors.dtype)
         assert mask is not None
         long_out = self.transformer(src, mask, rout_pool, pos)
-        # long_out = F.interpolate(long_out,size=[64,64])
-        # hs = F.interpolate(hs,size=[128,128]) #beijing
         long_out = F.interpolate(long_out,size=list(out3.shape[-2:]))
 
         # merge short-range and long-range

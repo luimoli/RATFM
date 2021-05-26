@@ -48,7 +48,7 @@ class MapData(data.Dataset):
         else:
             print('------no road_map INPUT!---------')
             # self.road_map = [0]
-        assert len(self.X) == len(self.Y) and len(self.X) == len(self.external) and self.road_map
+        assert len(self.X) == len(self.Y) and len(self.X) == len(self.external) and not (self.road_map is None)
         self.len = len(self.X)
         print('# {} samples: {}'.format(mode, len(self.X)))
         cuda = True if torch.cuda.is_available() else False
