@@ -1,32 +1,27 @@
 import os
-import sys
 import warnings
 import argparse
 import numpy as np
+
 import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.backends.cudnn as cudnn
-from torch.utils.data import DataLoader
-from datetime import datetime
 from .utils.metrics import *
 from .utils.misc import *
 
 from .utils.data_sr_road import get_dataloader_sr
 from .models.RATFM import Mixmap
-
 from .modules.transformer import build_transformer
 from .modules.position_encoding import build_position_encoding
 
 warnings.filterwarnings("ignore")
+
 # load arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--n_residuals', type=int, default=16,
                     help='number of residual units')
 parser.add_argument('--base_channels', type=int,
-                    default=128, help='number of feature maps')  #128
+                    default=128, help='number of feature maps')
 parser.add_argument('--road_channels', type=int,
-                    default=1, help='number of feature maps')#########ori:128
+                    default=1, help='number of feature maps')
 parser.add_argument('--ext_flag', action='store_true',
                     help='whether to use external factors')
 parser.add_argument('--batch_size', type=int, default=16,

@@ -1,12 +1,6 @@
-# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
-"""
-Various positional encodings for the transformer.
-"""
 import math
 import torch
 from torch import nn
-
-# from util.misc import NestedTensor
 from ..utils.misc import NestedTensor
 
 class PositionEmbeddingSine(nn.Module):
@@ -39,7 +33,6 @@ class PositionEmbeddingSine(nn.Module):
 
         dim_t = torch.arange(self.num_pos_feats, dtype=torch.float32, device=x.device)
         dim_t = self.temperature ** (2 * (dim_t // 2) / self.num_pos_feats)
-
         pos_x = x_embed[:, :, :, None] / dim_t
         pos_y = y_embed[:, :, :, None] / dim_t
         pos_x = torch.stack((pos_x[:, :, :, 0::2].sin(), pos_x[:, :, :, 1::2].cos()), dim=4).flatten(3)

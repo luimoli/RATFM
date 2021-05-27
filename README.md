@@ -17,14 +17,14 @@ Our RATFM uses the following dependencies:
 * Pytorch 1.5+
 * Torchvision 0.6+
 * CUDA 9.2 or latest version
-* python 3.8+
-* opencv-python 4.5.1
-* pillow 8.1.0
+* Python 3.8+
+* Opencv-python 4.5.1
+* Pillow 8.1.0
 
 ## Dataset Preparation
 The datasets ***XiAn*** and ***ChengDu*** we construt is detailed in Section 4.1.1 of our paper. Here we release them for public use. 
 
-unzip "./data/<dataset_name>.zip" to a folder named <dataset_name> to obtain the corresponding datasets. 
+Unzip "./data/<dataset_name>.zip" to a folder named <dataset_name> to obtain the corresponding datasets. 
 
 For example, the path of training input need to be "./data/P1/train/X.npy".
 ```
@@ -38,7 +38,7 @@ For example, the path of training input need to be "./data/P1/train/X.npy".
 
 Several important input arguments:
 
-- *channels* : input and output channel (2 for XiAn and ChengDu)
+- *channels* : number of channels for input and output (2 for XiAn and ChengDu, 1 for TaxiBJ-P1)
 - *ext_flag* : whether to use *External Factor Modeling Module*
 - *folder_name* : set a folder to preserve the trained models, which will be generated under *./model/<folder_name>/*
 - *dataset_name* : which dataset to use (XiAn, ChengDu and TaxiBJ-P1)
@@ -88,36 +88,23 @@ python -m RATFM.test --ext_flag --folder_name P1 --dataset_name TaxiBJ-P1 --city
 
 Or use custom settings to evaluate your own trained model:
 ```
-python -m RATFM.test --run_num ....
+python -m RATFM.test --run_num <int_num> ....
 ```
 
 
-
-
-<!-- 
-The following examples are conducted on dataset XiAn:
-* Example 1 (default settings):
-```
-python -m RATFM.train --ext_flag --dataset "XiAn"
-```
-
-* Example 2 (using arbitrary settings):
-```
-python -m RATFM.train --ext_flag --n_epochs 200 --n_residuals 20 --base_channels 128 --dataset "XiAn"
-```
-
-* Example 3 (UrbanFM-ne, i.e., UrbanFM without external subnet):
-```
-python -m UrbanFM.train --dataset "P1"
-``` -->
-
-<!-- * Example 4 (UrbanFM with large amounts of parameters):
-```
-python -m UrbanFM.train --ext_flag --n_residuals 16 --base_channels 128 --dataset "P1"
-``` -->
 
 
 ## Visualization
+Visualization of the urban map, coarse-grained traffic flow map, fine-grained flow map, and road network map for the XiAn dataset (top row) and the TaxiBJ-P1 dataset (bottom row).
+
+![](imgs/visualization_example.png)
+
+
+Visualization for inference errors of different methods. These three rows show the residual maps on XiAn, ChengDu and TaxiBJ-P1,
+respectively. We can observe that the proposed RATFM achieves smaller inference errors in most regions, especially some road-related regions,
+e.g., the red blocks in this figure.
+![](imgs/inference_errors.png)
+
 to be supplemented...
 
 

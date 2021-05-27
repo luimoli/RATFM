@@ -2,13 +2,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 from torchvision.models import vgg19
-import math
 from torch.nn.parameter import Parameter
 from torch.utils.data import Dataset
 from ..utils.misc import nested_tensor_from_tensor_list, NestedTensor
-
-from ..modules.road_1dconv import OneD_Block,OneD_Block_hv
-
+from ..modules.road_1dconv import OneD_Block
 
 class ResidualBlock(nn.Module):
     def __init__(self, in_features):

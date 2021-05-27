@@ -1,16 +1,14 @@
-# import pandas as pd
 import numpy as np
-# import seaborn as sns
 import os
 import math
 import torch
 from torch.utils.data import DataLoader
-# from matplotlib import pyplot as plt
 from torch.utils import data
 import random
 import cv2
 from PIL import Image
 import PIL.ImageOps
+# import seaborn as sns
 
 uppath = os.path.abspath('.')
 # print(uppath)
@@ -47,7 +45,7 @@ class MapData(data.Dataset):
             self.road_map = np.expand_dims(cv2.resize(np.array(PIL.ImageOps.invert(Image.open(bei_road_path).convert('L'))), (128,128), interpolation=cv2.INTER_LINEAR), 0)
         else:
             print('------no road_map INPUT!---------')
-            # self.road_map = [0]
+
         assert len(self.X) == len(self.Y) and len(self.X) == len(self.external) and not (self.road_map is None)
         self.len = len(self.X)
         print('# {} samples: {}'.format(mode, len(self.X)))
@@ -72,7 +70,7 @@ class MapData(data.Dataset):
         road = self.road_map
 
         # adaptive weighted road
-        mean_A = np.mean(np.abs(x), 0) # [2,16,16]->[16,16] 
+        mean_A = np.mean(np.abs(x), 0)
         if self.channel == 2:
             mean_A = self.MapCopy(mean_A, 8) # 128(roadmap)//16(coarse)
         elif self.channel == 1:
@@ -96,7 +94,7 @@ class MapData(data.Dataset):
 def get_dataloader_sr(data_path, batch_size, mode='train', road='xian', channel=2):
     '''
     mode: train/valid/teat
-    road: road_mode = (xian,cdu,no) which is str
+    road: road_mode = ('xian','cdu','P1'  or 'no'), which is str
     '''
     if mode == 'train':
         data = MapData(data_path,mode,road,channel)

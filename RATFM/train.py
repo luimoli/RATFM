@@ -1,25 +1,19 @@
 import os
-import sys
 import warnings
 import numpy as np
 import argparse
 import warnings
 from datetime import datetime
-from PIL import Image
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.backends.cudnn as cudnn
-from torch.autograd import Variable
-from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 from .utils.metrics import *
 from .utils.misc import *
 
 from .utils.data_sr_road import get_dataloader_sr
 from .models.RATFM import Mixmap
-
 from .modules.transformer import build_transformer
 from .modules.position_encoding import build_position_encoding
 
@@ -156,20 +150,18 @@ mapes_in, mapes_out = [np.inf], [np.inf]
 dic = {30:1e-4}
 print('leaining rate changes when [epoch/lr]:',dic)
 
-# start trainning =======================================
+# start trainning --------------------------------------
 pbar = tqdm(range(opt.n_epochs))
 # for epoch in tqdm(range(opt.n_epochs)):
 for epoch in pbar:
     pbar.set_description(save_path[12:])
 
     for i, (real_coarse_A, ext, real_fine_A, road_A) in enumerate(train_dataloader):
+
         model.train()
         optimizer.zero_grad()
-
-        #---forward------------
         gen_hr = model(real_coarse_A, ext, road_A)
         loss = criterion(gen_hr, real_fine_A)
-
         loss.backward()
         optimizer.step()
 
@@ -187,7 +179,7 @@ for epoch in pbar:
                     flows_f_ = flows_f.cpu().detach().numpy()
                     total_mape += get_MAPE(preds_, flows_f_) * len(flows_c)
             mape = total_mape / len(valid_dataloader.dataset)
-            # select best MAPES to seve model
+            # select best MAPES to preserve model
             if mape < np.min(mapes):
                 tqdm.write("epoch\t{}\titer\t{}\tMAPE\t{:.6f}".format(epoch, iter, mape))
                 #--save model at each iter--

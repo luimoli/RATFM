@@ -1,20 +1,8 @@
-# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
-"""
-DETR Transformer class.
-
-Copy-paste from torch.nn.Transformer with modifications:
-    * positional encodings are passed in MHattention
-    * extra LN at the end of encoder is removed
-    * decoder returns a stack of activations from all decoding layers
-"""
 import copy
-from typing import Optional, List
-
+from typing import Optional
 import torch
 import torch.nn.functional as F
 from torch import nn, Tensor
-
-
 class Transformer(nn.Module):
 
     def __init__(self, d_model=512, nhead=8, num_encoder_layers=6,
@@ -47,20 +35,16 @@ class Transformer(nn.Module):
     def forward(self, src, mask, query_embed, pos_embed):
         # flatten NxCxHxW to HWxNxC
         bs, c, h, w = src.shape
-        src = src.flatten(2).permute(2, 0, 1)               # [4096,batch,128]
-        pos_embed = pos_embed.flatten(2).permute(2, 0, 1)   # [4096,batch,128]
-        # query_embed = query_embed.unsqueeze(1).repeat(1, bs, 1)
-        query_embed = query_embed.flatten(2).permute(2, 0, 1)  # B x C x H x W -> HWxBxC [4096, batch, 128]
-        mask = mask.flatten(1)                                 # B x H x W -> BxHW  [batch, 4096]
+        src = src.flatten(2).permute(2, 0, 1)              
+        pos_embed = pos_embed.flatten(2).permute(2, 0, 1)   
+        query_embed = query_embed.flatten(2).permute(2, 0, 1)  # B x C x H x W -> HW x B x C 
+        mask = mask.flatten(1)                                 # B x H x W -> B x HW 
         tgt = torch.zeros_like(query_embed)
-
         memory = self.encoder(src, src_key_padding_mask=mask, pos=pos_embed)
-        hs = self.decoder(tgt, memory, memory_key_padding_mask=mask,pos=pos_embed, query_pos=query_embed)
-        
+        hs = self.decoder(tgt, memory, memory_key_padding_mask=mask,pos=pos_embed, query_pos=query_embed)    
         res = hs[-1].permute(1, 2, 0)
         hs_b, hs_c, hs_h_w = res.shape
         hs_res = res.view(hs_b, hs_c, h, w)
-
         return hs_res
         # return hs.transpose(1, 2), memory.permute(1, 2, 0).view(bs, c, h, w)
 
@@ -87,7 +71,6 @@ class TransformerEncoder(nn.Module):
             output = self.norm(output)
 
         return output
-
 
 class TransformerDecoder(nn.Module):
 
@@ -128,7 +111,6 @@ class TransformerDecoder(nn.Module):
             return torch.stack(intermediate)
 
         return output.unsqueeze(0)
-
 
 class TransformerEncoderLayer(nn.Module):
 
