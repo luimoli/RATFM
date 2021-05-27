@@ -18,7 +18,7 @@ from .utils.metrics import *
 from .utils.misc import *
 
 from .utils.data_sr_road import get_dataloader_sr
-from .models.RTFM import Mixmap
+from .models.RATFM import Mixmap
 
 from .modules.transformer import build_transformer
 from .modules.position_encoding import build_position_encoding

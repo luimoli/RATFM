@@ -14,9 +14,9 @@ import PIL.ImageOps
 
 uppath = os.path.abspath('.')
 # print(uppath)
-s_road_path = uppath + '/RTFM/pics/xian1.png'
-t_road_path = uppath + '/RTFM/pics/cdu1.png'
-bei_road_path = uppath + '/RTFM/pics/beij1.png'
+s_road_path = uppath + '/RATFM/road_map/xian1.png'
+t_road_path = uppath + '/RATFM/road_map/cdu1.png'
+bei_road_path = uppath + '/RATFM/road_map/beij1.png'
 
 class MapData(data.Dataset):
     def __init__(self, datapath, mode='train',road_mode='no',channel=2):
