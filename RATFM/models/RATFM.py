@@ -42,11 +42,11 @@ class Residual_OneD_Block(nn.Module):
 class Mixmap(nn.Module):
     def __init__(self, position_embedding, transformer, in_channels=2, out_channels=2, 
                 n_residual_blocks_prefix=5,n_residuals=16,
-                 base_channels=64, road_channels=1,ext_dim=7, img_width=64, img_height=64, ext_flag=False, hidden_dim=128):
+                 base_channels=64, road_channels=1,ext_dim=7, map_width=64, map_height=64, ext_flag=False, hidden_dim=128):
         super(Mixmap, self).__init__()
         self.ext_flag = ext_flag
-        self.img_width = img_width
-        self.img_height = img_height
+        self.map_width = map_width
+        self.map_height = map_height
         self.in_channels = in_channels
         self.out_channels = out_channels
 
@@ -58,7 +58,7 @@ class Mixmap(nn.Module):
                 nn.Linear(10, 128), 
                 nn.Dropout(0.3),
                 nn.ReLU(inplace=True),
-                nn.Linear(128, img_width * img_height),
+                nn.Linear(128, map_width * map_height),
                 nn.ReLU(inplace=True)
             )
         if ext_flag and in_channels==1:# beijing
@@ -69,7 +69,7 @@ class Mixmap(nn.Module):
                 nn.Linear(12, 128), 
                 nn.Dropout(0.3),
                 nn.ReLU(inplace=True),
-                nn.Linear(128, img_width * img_height),
+                nn.Linear(128, map_width * map_height),
                 nn.ReLU(inplace=True)
             )
 
@@ -161,7 +161,7 @@ class Mixmap(nn.Module):
             ext_out2 = self.embed_hour(ext[:, 1].long().view(-1, 1)).view(-1, 3) 
             ext_out3 = self.embed_weather(ext[:, 4].long().view(-1, 1)).view(-1, 3) 
             ext_out4 = ext[:, 2:4] 
-            ext_out = self.ext2lr(torch.cat([ext_out1, ext_out2, ext_out3, ext_out4], dim=1)).view(-1, 1, self.img_width, self.img_height) 
+            ext_out = self.ext2lr(torch.cat([ext_out1, ext_out2, ext_out3, ext_out4], dim=1)).view(-1, 1, self.map_width, self.map_height) 
             inp = torch.cat([cmap, ext_out], dim=1)
         if self.ext_flag and self.in_channels==1: # TaxiBJ-P1
             ext_out1 = self.embed_day(ext[:, 4].long().view(-1, 1)).view(-1, 2)
@@ -171,7 +171,7 @@ class Mixmap(nn.Module):
                 ext[:, 6].long().view(-1, 1)).view(-1, 3)
             ext_out4 = ext[:, :4]
             ext_out = self.ext2lr(torch.cat(
-                [ext_out1, ext_out2, ext_out3, ext_out4], dim=1)).view(-1, 1, self.img_width, self.img_height)
+                [ext_out1, ext_out2, ext_out3, ext_out4], dim=1)).view(-1, 1, self.map_width, self.map_height)
             inp = torch.cat([cmap, ext_out], dim=1)
 
         # short-range inference

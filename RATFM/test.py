@@ -26,17 +26,15 @@ parser.add_argument('--ext_flag', action='store_true',
                     help='whether to use external factors')
 parser.add_argument('--batch_size', type=int, default=16,
                     help='training batch size')
-parser.add_argument('--img_width', type=int, default=64,
+parser.add_argument('--map_width', type=int, default=64,
                     help='image width')
-parser.add_argument('--img_height', type=int, default=64,
+parser.add_argument('--map_height', type=int, default=64,
                     help='image height')
 parser.add_argument('--channels', type=int, default=2,  
-                    help='number of flow image channels')
-parser.add_argument('--folder_name', type=str, default='xian',  
-                    help='folder_name to save models')                                           
+                    help='number of flow image channels')                                         
 parser.add_argument('--dataset_name', type=str, default='XiAn',  #  XiAn | ChengDu | TaxiBJ-P1 
                     help='which dataset to use')
-parser.add_argument('--city', type=str, default='P1',  # cdu | xian | P1 | no  
+parser.add_argument('--city', type=str, default='xian',  # cdu | xian | P1 | no  
                     help='which city_road_map to use')
 parser.add_argument('--run_num', type=int, default=0,
                     help='save model folder')
@@ -60,11 +58,9 @@ parser.add_argument('--position_embedding', default='sine', type=str, choices=('
 opt = parser.parse_args()
 print(opt)
 
-model_path = 'model/{}/{}-{}-{}-{}'.format(opt.folder_name,
-                                              opt.n_residuals,
-                                              opt.base_channels,
-                                              opt.ext_flag,
-                                              opt.run_num)
+model_path = 'model/{}-{}-{}'.format(opt.city, 
+                                    opt.ext_flag,
+                                    opt.run_num)
 
 # test CUDA
 cuda = True if torch.cuda.is_available() else False
@@ -78,8 +74,8 @@ model = Mixmap(position_embedding, transformer,
                 out_channels=opt.channels,
                 base_channels=opt.base_channels,
                 road_channels=opt.road_channels,
-                img_width=opt.img_width,
-                img_height=opt.img_height,
+                map_width=opt.map_width,
+                map_height=opt.map_height,
                 n_residuals=opt.n_residuals,
                 ext_flag=opt.ext_flag)
 

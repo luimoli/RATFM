@@ -40,14 +40,12 @@ parser.add_argument('--road_channels', type=int,
 parser.add_argument('--seed', type=int, default=2017, help='random seed')
 parser.add_argument('--ext_flag', action='store_true',
                     help='whether to use external factors')
-parser.add_argument('--img_width', type=int, default=64,
+parser.add_argument('--map_width', type=int, default=64,
                     help='image width')
-parser.add_argument('--img_height', type=int, default=64,
+parser.add_argument('--map_height', type=int, default=64,
                     help='image height') 
 parser.add_argument('--channels', type=int, default=2,   # (inflow + outflow) | XiAn & Chengdu: 2 channel | beijing:1 channel
-                    help='number of flow image channels')
-parser.add_argument('--folder_name', type=str, default='xian',
-                    help='folder_name to save models ')                   
+                    help='number of flow image channels')              
 parser.add_argument('--dataset_name', type=str, default='xian',  #  XiAn | ChengDu | TaxiBJ-P1 
                     help='which dataset to use')
 parser.add_argument('--city', type=str, default='xian', # cdu | xian | P1 | no  
@@ -77,17 +75,14 @@ print(opt)
 
 torch.manual_seed(opt.seed)
 warnings.filterwarnings('ignore')
+
 # path for saving model---------------------------------------------
-while os.path.exists('model/{}/{}-{}-{}-{}'.format(opt.folder_name,
-                                             opt.n_residuals,
-                                             opt.base_channels,
+while os.path.exists('model/{}-{}-{}'.format(opt.city,
                                              opt.ext_flag,
                                              opt.run_num)): opt.run_num+=1
-save_path = 'model/{}/{}-{}-{}-{}'.format(opt.folder_name,
-                                             opt.n_residuals,
-                                             opt.base_channels,
-                                             opt.ext_flag,
-                                             opt.run_num)
+save_path = 'model/{}-{}-{}'.format(opt.city, 
+                                    opt.ext_flag,
+                                    opt.run_num)
 print(save_path)
 os.makedirs(save_path, exist_ok=True)
 
@@ -114,8 +109,8 @@ model = Mixmap(position_embedding, transformer,
                 out_channels=opt.channels,
                 base_channels=opt.base_channels,
                 road_channels=opt.road_channels,
-                img_width=opt.img_width,
-                img_height=opt.img_height,
+                map_width=opt.map_width,
+                map_height=opt.map_height,
                 n_residuals=opt.n_residuals,
                 ext_flag=opt.ext_flag)
 
