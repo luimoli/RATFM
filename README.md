@@ -94,13 +94,13 @@ Or use custom settings to train:
 python -m RATFM.train --n_epochs <int_num> --lr <float_num> --base_channels <int_num> ...
 ```
 <!-- Several important input arguments: -->
-- *channels* : number of channels for input and output (2 for XiAn and ChengDu, 1 for TaxiBJ-P1)
 - *ext_flag* : whether to use *External Factor Modeling Module*
-- *folder_name* : set a folder to preserve the trained models, which will be generated under *./model/<folder_name>/*
+- *channels* : number of channels for input and output (2 for XiAn and ChengDu, 1 for TaxiBJ-P1)
 - *dataset_name* : which dataset to use (XiAn, ChengDu and TaxiBJ-P1)
 - *city* : which city's road network map should be loaded (xian, cdu, P1)
 - *map_width* : the width of fine-grained traffic flow map
 - *map_height* : the height of fine-grained traffic flow map
+<!-- - *folder_name* : set a folder to preserve the trained models, which will be generated under *./model/<folder_name>/* -->
 <!-- - ... -->
 
 
