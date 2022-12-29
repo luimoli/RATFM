@@ -17,7 +17,7 @@ class OneD_Block(nn.Module):
         self.deconv4 = nn.Conv2d(
             in_channels, in_channels // 4, (1, 9), padding=(0, 4)
         )
-        self.conv = nn.Conv2d(
+        self.conv3 = nn.Conv2d(
             in_channels + in_channels // 2, n_filters, 1)
 
     def forward(self, x):
