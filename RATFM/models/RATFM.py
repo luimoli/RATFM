@@ -39,11 +39,11 @@ class Residual_OneD_Block(nn.Module):
         return x + self.conv_block(x)
 
 
-class Mixmap(nn.Module):
+class RATFM(nn.Module):
     def __init__(self, position_embedding, transformer, in_channels=2, out_channels=2, 
                 n_residual_blocks_prefix=5,n_residuals=16,
                  base_channels=64, road_channels=1,ext_dim=7, map_width=64, map_height=64, ext_flag=False, hidden_dim=128):
-        super(Mixmap, self).__init__()
+        super(RATFM, self).__init__()
         self.ext_flag = ext_flag
         self.map_width = map_width
         self.map_height = map_height

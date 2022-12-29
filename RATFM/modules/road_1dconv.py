@@ -26,7 +26,7 @@ class OneD_Block(nn.Module):
         x3 = self.inv_h_transform(self.deconv3(self.h_transform(x)))
         x4 = self.inv_v_transform(self.deconv4(self.v_transform(x)))
         x = torch.cat((x1, x2, x3, x4), 1)
-        x = self.conv(x)
+        x = self.conv3(x)
         return x
 
     def h_transform(self, x):
