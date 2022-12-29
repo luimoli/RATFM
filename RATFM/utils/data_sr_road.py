@@ -40,7 +40,7 @@ class MapData(data.Dataset):
         elif self.road_mode == 'cdu':
             print(f'current road map:{self.road_mode}')
             self.road_map = np.expand_dims(cv2.resize(np.flip(np.array(PIL.ImageOps.invert(Image.open(t_road_path).convert('L'))), 0), (128,128), interpolation=cv2.INTER_LINEAR), 0)
-        elif self.road_mode == 'P1':
+        elif self.road_mode == 'bj':
             print(f'current road map:{self.road_mode}')
             self.road_map = np.expand_dims(cv2.resize(np.array(PIL.ImageOps.invert(Image.open(bei_road_path).convert('L'))), (128,128), interpolation=cv2.INTER_LINEAR), 0)
         else:
@@ -94,7 +94,7 @@ class MapData(data.Dataset):
 def get_dataloader_sr(data_path, batch_size, mode='train', road='xian', channel=2):
     '''
     mode: train/valid/teat
-    road: road_mode = ('xian','cdu','P1'  or 'no'), which is str
+    road: road_mode = ('xian','cdu','bj'  or 'no'), which is str
     '''
     if mode == 'train':
         data = MapData(data_path,mode,road,channel)
