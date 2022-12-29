@@ -4,7 +4,7 @@ import torch
 from torchvision.models import vgg19
 from torch.nn.parameter import Parameter
 from torch.utils.data import Dataset
-from ..utils.misc import nested_tensor_from_tensor_list, NestedTensor
+from ..utils.misc import get_nested_tensor, NestedTensor
 from ..modules.road_1dconv import OneD_Block
 
 class ResidualBlock(nn.Module):
@@ -192,7 +192,7 @@ class Mixmap(nn.Module):
         
         # long-range inference
         if isinstance(out_pool, (list, torch.Tensor)):
-            out_nested = nested_tensor_from_tensor_list(out_pool)
+            out_nested = get_nested_tensor(out_pool)
         src, mask = out_nested.decompose()
         pos = self.position_embedding(out_nested).to(out_nested.tensors.dtype)
         assert mask is not None
