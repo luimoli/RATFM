@@ -83,11 +83,11 @@ These models are the well-trained RATFM in our paper.
 Here we present examples of trainning commands which should be conducted on the XiAn dataset:
 
 ```
-python -m RATFM.train --ext_flag --dataset_name XiAn --city xian --map_width 64 --map_height 64 --channels 2
+python -m RATFM.train --ext_flag --dataset_name XiAn --city_road_map xian --map_width 64 --map_height 64 --channels 2
 ```
 <!-- Train RATFM without *External Factor Modeling Module*:
 ```
-python -m RATFM.train --folder_name <your_custom_folder> --dataset_name XiAn --city xian --map_width 64 --map_height 64 --channels 2
+python -m RATFM.train --folder_name <your_custom_folder> --dataset_name XiAn --city_road_map xian --map_width 64 --map_height 64 --channels 2
 ``` -->
 Or use custom settings to train:
 ```
@@ -97,7 +97,7 @@ python -m RATFM.train --n_epochs <int_num> --lr <float_num> --base_channels <int
 - *ext_flag* : whether to use *External Factor Modeling Module*
 - *channels* : number of channels for input and output (2 for XiAn and ChengDu, 1 for TaxiBJ-P1)
 - *dataset_name* : which dataset to use (XiAn, ChengDu and TaxiBJ-P1)
-- *city* : which city's road network map should be loaded (xian, cdu, P1)
+- *city_road_map* : which city's road network map should be loaded (xian, cdu, bj)
 - *map_width* : the width of fine-grained traffic flow map
 - *map_height* : the height of fine-grained traffic flow map
 <!-- - *folder_name* : set a folder to preserve the trained models, which will be generated under *./model/<folder_name>/* -->
@@ -114,17 +114,17 @@ Use the following commands to test the pre-trained models:
 
 XiAn
 ```
-python -m RATFM.test --ext_flag --dataset_name XiAn --city xian --map_width 64  --map_height 64 --channels 2
+python -m RATFM.test --ext_flag --dataset_name XiAn --city_road_map xian --map_width 64  --map_height 64 --channels 2
 ```
 
 ChengDu
 ```
-python -m RATFM.test --ext_flag --dataset_name ChengDu --city cdu --map_width 64  --map_height 64 --channels 2
+python -m RATFM.test --ext_flag --dataset_name ChengDu --city_road_map cdu --map_width 64  --map_height 64 --channels 2
 ```
 
 TaxiBJ-P1
 ```
-python -m RATFM.test --ext_flag --dataset_name TaxiBJ-P1 --city P1 --map_width 128  --map_height 128 --channels 1
+python -m RATFM.test --ext_flag --dataset_name TaxiBJ-P1 --city_road_map bj --map_width 128  --map_height 128 --channels 1
 ```
 
 Or use custom settings to evaluate your own trained model:
