@@ -8,7 +8,7 @@ from .utils.metrics import *
 from .utils.misc import *
 
 from .utils.data_sr_road import get_dataloader_sr
-from .models.RATFM import Mixmap
+from .models.RATFM import RATFM
 from .modules.transformer import build_transformer
 from .modules.position_encoding import build_position_encoding
 
@@ -69,7 +69,7 @@ Tensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 # # initial model
 transformer = build_transformer(opt, opt.hidden_dim)
 position_embedding = build_position_encoding(opt, opt.hidden_dim)
-model = Mixmap(position_embedding, transformer,
+model = RATFM(position_embedding, transformer,
                 in_channels=opt.channels,
                 out_channels=opt.channels,
                 base_channels=opt.base_channels,
@@ -83,7 +83,7 @@ model = Mixmap(position_embedding, transformer,
 model.load_state_dict(torch.load('{}/final_model.pt'.format(model_path)))
 
 if cuda: model.cuda()
-print_model_parm_nums(model, 'Mixmap')
+print_model_parm_nums(model, 'RATFM')
 
 # load testset
 datapath = os.path.join('data', opt.dataset_name)
