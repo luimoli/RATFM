@@ -13,7 +13,7 @@ from .utils.metrics import *
 from .utils.misc import *
 
 from .utils.data_sr_road import get_dataloader_sr
-from .models.RATFM import Mixmap
+from .models.RATFM import RATFM
 from .modules.transformer import build_transformer
 from .modules.position_encoding import build_position_encoding
 
@@ -48,7 +48,7 @@ parser.add_argument('--channels', type=int, default=2,   # (inflow + outflow) | 
                     help='number of flow image channels')              
 parser.add_argument('--dataset_name', type=str, default='xian',  #  XiAn | ChengDu | TaxiBJ-P1 
                     help='which dataset to use')
-parser.add_argument('--city', type=str, default='xian', # cdu | xian | P1 | no  
+parser.add_argument('--city_road_map', type=str, default='xian', # cdu | xian | bj | no  
                     help='which city_road_map to use')
 parser.add_argument('--run_num', type=int, default=0,
                     help='save model folder serial number')
@@ -77,10 +77,10 @@ torch.manual_seed(opt.seed)
 warnings.filterwarnings('ignore')
 
 # path for saving model---------------------------------------------
-while os.path.exists('model/{}-{}-{}'.format(opt.city,
+while os.path.exists('model/{}-{}-{}'.format(opt.dataset_name,
                                              opt.ext_flag,
                                              opt.run_num)): opt.run_num+=1
-save_path = 'model/{}-{}-{}'.format(opt.city, 
+save_path = 'model/{}-{}-{}'.format(opt.dataset_name, 
                                     opt.ext_flag,
                                     opt.run_num)
 print(save_path)
@@ -104,7 +104,7 @@ Tensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 # # # initial model
 transformer = build_transformer(opt, opt.hidden_dim)
 position_embedding = build_position_encoding(opt, opt.hidden_dim)
-model = Mixmap(position_embedding, transformer, 
+model = RATFM(position_embedding, transformer, 
                 in_channels=opt.channels,
                 out_channels=opt.channels,
                 base_channels=opt.base_channels,
@@ -116,7 +116,7 @@ model = Mixmap(position_embedding, transformer,
 
 model.apply(weights_init_normal)
 torch.nn.utils.clip_grad_norm(model.parameters(), max_norm=5.0)
-print_model_parm_nums(model, 'Mixmap')
+print_model_parm_nums(model, 'RATFM')
 
 criterion = nn.MSELoss()
 if cuda:
@@ -126,9 +126,9 @@ if cuda:
 # load training set and validation set----------------------
 source_datapath = os.path.join('data', opt.dataset_name)
 train_dataloader = get_dataloader_sr(
-    source_datapath, opt.batch_size, 'train', opt.city, opt.channels)
+    source_datapath, opt.batch_size, 'train', opt.city_road_map, opt.channels)
 valid_dataloader = get_dataloader_sr(
-    source_datapath, opt.batch_size, 'valid', opt.city, opt.channels)
+    source_datapath, opt.batch_size, 'valid', opt.city_road_map, opt.channels)
 
 # Optimizers----------------------------------------------
 optimizer = torch.optim.Adam(model.parameters(), lr=opt.lr, betas=(opt.b1, opt.b2))
