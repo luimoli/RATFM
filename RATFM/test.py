@@ -34,7 +34,7 @@ parser.add_argument('--channels', type=int, default=2,
                     help='number of flow image channels')                                         
 parser.add_argument('--dataset_name', type=str, default='XiAn',  #  XiAn | ChengDu | TaxiBJ-P1 
                     help='which dataset to use')
-parser.add_argument('--city', type=str, default='xian',  # cdu | xian | P1 | no  
+parser.add_argument('--city_road_map', type=str, default='xian',  # cdu | xian | bj | no  
                     help='which city_road_map to use')
 parser.add_argument('--run_num', type=int, default=0,
                     help='save model folder')
@@ -58,7 +58,7 @@ parser.add_argument('--position_embedding', default='sine', type=str, choices=('
 opt = parser.parse_args()
 print(opt)
 
-model_path = 'model/{}-{}-{}'.format(opt.city, 
+model_path = 'model/{}-{}-{}'.format(opt.dataset_name, 
                                     opt.ext_flag,
                                     opt.run_num)
 
@@ -88,10 +88,10 @@ print_model_parm_nums(model, 'Mixmap')
 # load testset
 datapath = os.path.join('data', opt.dataset_name)
 dataloader = get_dataloader_sr(
-    datapath, opt.batch_size, 'test', opt.city, opt.channels)
+    datapath, opt.batch_size, 'test', opt.city_road_map, opt.channels)
 
 # testing phase--------------------------------------------------------------
-total_mse, total_mae, total_mape = 0, 0, 0
+total_mse, total_mae, total_mape, total_p2p_mape = 0, 0, 0, 0
 total_mape_in, total_mape_out = 0.0, 0.0
 
 with torch.no_grad():
@@ -104,9 +104,11 @@ with torch.no_grad():
         total_mse += get_MSE(preds, test_labels) * len(test_data)
         total_mae += get_MAE(preds, test_labels) * len(test_data)
         total_mape += get_MAPE(preds, test_labels) * len(test_data)
+        total_p2p_mape += get_p2p_MAPE(preds, test_labels) * len(test_data)
 
 rmse = np.sqrt(total_mse / len(dataloader.dataset))
 mae = total_mae / len(dataloader.dataset)
 mape = total_mape / len(dataloader.dataset)
+p2p_mape = total_p2p_mape / len(dataloader.dataset)
 
-print('Test RMSE = {:.6f}, MAE = {:.6f}, MAPE = {:.6f}'.format(rmse, mae, mape))
+print('Test RMSE = {:.6f}, MAE = {:.6f}, MAPE = {:.6f}, p2p_MAPE = {:.6f}'.format(rmse, mae, mape, p2p_mape))
