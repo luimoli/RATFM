@@ -18,4 +18,4 @@ def get_p2p_MAPE(pred, real):
     ori_real = real.copy()
     epsilon = 1 # if use small number like 1e-5 resulting in very large value
     real[real == 0] = epsilon 
-    return np.mean(np.abs(ori_real - pred) / real)
+    return np.mean(np.abs(ori_real - pred) / np.abs(real))
