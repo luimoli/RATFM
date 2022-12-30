@@ -114,17 +114,17 @@ Use the following commands to test the pre-trained models:
 
 XiAn
 ```
-python -m RATFM.test --ext_flag --dataset_name XiAn --city_road_map xian --map_width 64  --map_height 64 --channels 2
+python -m RATFM.test --ext_flag --dataset_name XiAn --city_road_map xian --map_width 64  --map_height 64 --channels 2 --batch_size 1
 ```
 
 ChengDu
 ```
-python -m RATFM.test --ext_flag --dataset_name ChengDu --city_road_map cdu --map_width 64  --map_height 64 --channels 2
+python -m RATFM.test --ext_flag --dataset_name ChengDu --city_road_map cdu --map_width 64  --map_height 64 --channels 2 --batch_size 1
 ```
 
 TaxiBJ-P1
 ```
-python -m RATFM.test --ext_flag --dataset_name TaxiBJ-P1 --city_road_map bj --map_width 128  --map_height 128 --channels 1
+python -m RATFM.test --ext_flag --dataset_name TaxiBJ-P1 --city_road_map bj --map_width 128  --map_height 128 --channels 1 --batch_size 1
 ```
 
 Or use custom settings to evaluate your own trained model:
