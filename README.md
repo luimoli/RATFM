@@ -46,6 +46,8 @@ cd RATFM/
 ### 2.Dataset Preparation
 The datasets ***XiAn*** and ***ChengDu*** we construt is detailed in Section 4.1.1 of our paper. Here we release them for public use. 
 
+Notice that the traffic maps in our datasets have two channels (i.e., inflow and outflow).  More specifically, ***we use positive numbers for inflow maps and negative numbers for outflow maps***.
+
 Unzip "./data/<dataset_name>.zip" to obtain the corresponding datasets. 
 
 <!-- For example, the path of training input need to be "./data/P1/train/X.npy". -->
@@ -65,6 +67,8 @@ XiAn
                                 Y.npy/    
                                 ext.npy/  
 ```
+
+
 
 ### 3.Get pre-trained RATFM
 ```
