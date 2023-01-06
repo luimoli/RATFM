@@ -104,7 +104,7 @@ with torch.no_grad():
         total_mse += get_MSE(preds, test_labels) * len(test_data)
         total_mae += get_MAE(preds, test_labels) * len(test_data)
         total_mape += get_MAPE(preds, test_labels) * len(test_data)
-        total_p2p_mape += get_p2p_MAPE(preds, test_labels) * len(test_data)
+        total_p2p_mape += get_p2p_MAPE(preds, test_labels.copy()) * len(test_data)
 
 rmse = np.sqrt(total_mse / len(dataloader.dataset))
 mae = total_mae / len(dataloader.dataset)
