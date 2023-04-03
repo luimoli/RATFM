@@ -6,24 +6,7 @@ Here we present the PyTorch implement of our Road-Aware Traffic Flow Magnifier (
 <!-- ![](img/framework.png) -->
 ![](imgs/RATFM_network.png)
 
-## Results
-We evaluate our RATFM on three large benchmarks ( XiAn, ChengDu, and TaxiBJ-P1 ) under several typical scenarios(see chapter 4 in our paper).
-Here we present the performance of different methods on the whole testing sets.
 
-![](imgs/performance_comparision.png)
-
-## Visualization
-Visualization of the urban map, coarse-grained traffic flow map, fine-grained flow map, and road network map for the XiAn dataset (top row) and the TaxiBJ-P1 dataset (bottom row).
-
-![](imgs/visualization_example.png)
-
-
-Visualization for inference errors of different methods. These three rows show the residual maps on XiAn, ChengDu and TaxiBJ-P1,
-respectively. We can observe that the proposed RATFM achieves smaller inference errors in most regions, especially some road-related regions,
-e.g., the red blocks in this figure.
-![](imgs/inference_errors.png)
-
-<!-- to be supplemented... -->
 
 ## Requirements
 Our RATFM uses the following dependencies: 
@@ -68,21 +51,7 @@ XiAn
                                 ext.npy/  
 ```
 
-
-
-### 3.Get pre-trained RATFM
-```
-cd ./model/
-           xian-True-0/final_model.pt
-           cdu-True-0/final_model.pt
-           P1-True-0/final_model.pt
-```
-These models are the well-trained RATFM in our paper.
-
-<!-- to be supplemented... -->
-
-
-### 4.Train
+### 3.Train
 
 Here we present examples of trainning commands which should be conducted on the XiAn dataset:
 
@@ -111,8 +80,8 @@ python -m RATFM.train --n_epochs <int_num> --lr <float_num> --base_channels <int
 
 <!-- to be supplemented... -->
 
-### 5.Test
-We provide well-trained RATFM models in our paper, which are placed under *./model/<model_folder_name>/*.
+### 4.Test
+Those well-trained RATFM models are placed under *./model/<model_folder_name>/* by default.
 
 Use the following commands to test the pre-trained models:
 
