@@ -32,7 +32,11 @@ class MapData(data.Dataset):
             print('---data channel error!---')
             
         self.external = np.load(os.path.join(self.datapath, 'ext.npy'))
-
+        if self.channel == 2:
+            self.external[:, 0] = self.external[:, 0] * 7
+            self.external[:, 1] = self.external[:, 1] * 24
+            self.external[:, 4] = self.external[:, 4] * 14
+         
         self.road_mode = road_mode
         if self.road_mode == 'xian':
             print(f'current road map:{self.road_mode}')
