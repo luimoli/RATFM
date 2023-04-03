@@ -21,7 +21,7 @@ from tqdm import tqdm
 
 # load arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--n_epochs', type=int, default=60,
+parser.add_argument('--n_epochs', type=int, default=100,
                     help='number of epochs of training')
 parser.add_argument('--batch_size', type=int, default=4,
                     help='training batch size')
