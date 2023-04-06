@@ -1,7 +1,21 @@
 # Road Network Guided Fine-Grained Urban Traffic Flow Inference
 <!-- This work focus on how to accurately generate fine-grained data from coarse-grained data collected with a small number of traffic sensors, which is termed fine-grained urban traffic flow inference.
 we propose a novel Road-Aware Traffic Flow Magnifier (RATFM), which fully exploits the prior knowledge of road network to learn the distribution patterns of fine-grained traffic flow. -->
-Here we present the PyTorch implement of our Road-Aware Traffic Flow Magnifier (RATFM).
+Accurate inference of fine-grained traffic flow from coarse-grained one is an emerging yet crucial problem, which can help greatly reduce the number of traffic monitoring sensors for cost savings. In this work, we notice that traffic flow has a high correlation with road network, which was either completely ignored or simply treated as an external factor in previous works. To facilitate this problem, we propose a novel Road-Aware Traffic Flow Magnifier (RATFM) that explicitly exploits the prior knowledge of road networks to fully learn the road-aware spatial distribution of fine-grained traffic flow. Benefiting from the tailor-designed road-aware inference mechanism, our method can generate high-quality fine-grained traffic flow maps. Extensive experiments on three real-world datasets show that the proposed RATFM outperforms state-of-the-art models under various scenarios.
+. 
+
+If you use our code and datasets for your research, please cite [our paper](https://arxiv.org/abs/2109.14251) :
+
+```
+@article{liu2021road,
+  title={Road network guided fine-grained urban traffic flow inference},
+  author={Liu, Lingbo and Liu, Mengmeng and Li, Guanbin and Wu, Ziyi and Lin, Liang},
+  journal={arXiv preprint arXiv:2109.14251},
+  year={2021}
+}
+```
+
+
 ## Framework
 <!-- ![](img/framework.png) -->
 ![](imgs/RATFM_network.png)
